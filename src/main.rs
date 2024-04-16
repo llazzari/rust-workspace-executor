@@ -1,26 +1,29 @@
-use std::process::{Command, ExitStatus};
-use structopt::StructOpt;
 
-// Define a struct to represent command-line arguments
-#[derive(Debug, StructOpt)]
-enum Workspace {
-    #[structopt(name = "thesis")]
-    Thesis,
-    #[structopt(name = "physics-project")]
-    PhysicsProject,
-    #[structopt(name = "psychology-app")]
-    PsychologyApp,
-}
+use std::process::{Command, ExitStatus};
+use clap::{App, Arg};
+
 
 fn main() {
-    // Parse command-line arguments
-    let workspace = Workspace::from_args();
+    // Define command-line interface using clap
+    let matches = App::new("Workspace Executor")
+        .version("1.0")
+        .author("Lucas Lazzari")
+        .about("Executes different workspaces")
+        .arg(
+            Arg::with_name("workspace")
+                .help("Specifies the workspace to run")
+                .possible_values(&["thesis", "physics-project", "psychology-app"])
+                .required(true),
+        )
+        .get_matches();
 
-    // Run the selected workspace
+    // Retrieve and match the selected workspace
+    let workspace = matches.value_of("workspace").unwrap();
     match workspace {
-        Workspace::Thesis => thesis(),
-        Workspace::PhysicsProject => physics_project(),
-        Workspace::PsychologyApp => psychology_app(),
+        "thesis" => thesis(),
+        "physics-project" => physics_project(),
+        "psychology-app" => psychology_app(),
+        _ => eprintln!("Invalid workspace specified"),
     }
 }
 
@@ -47,7 +50,6 @@ fn psychology_app() {
     let commands = [
         ("google-chrome", None),
         ("code", Some("/home/llazzari/Projects/psychology-apps/prontuary")),
-        
     ];
     execute_commands(&commands);
 }
