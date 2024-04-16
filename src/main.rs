@@ -7,7 +7,7 @@ fn main() {
     // Define command-line interface using clap
     let matches = App::new("Workspace Executor")
         .version("1.0")
-        .author("Lucas Lazzari")
+        .author("Lucas Lazzari <lucas.lazzari@outlook.com>")
         .about("Executes different workspaces")
         .arg(
             Arg::with_name("workspace")
